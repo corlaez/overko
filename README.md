@@ -7,11 +7,6 @@ State management for [Knockoutjs](https://knockoutjs.com/).
 - I will soon work with Knockout in 2019 for the first time.
 - The great testability and [TypeScript](https://www.typescriptlang.org/) support that the [Overmind](https://overmindjs.org) app's have.
 
-## TODOS
-
-- Fix actions
-- Add tests
-
 ## Comparison to Overmind
 
 In an Overmind React app we would have the following modules:

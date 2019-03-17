@@ -1,12 +1,16 @@
 {
   "name": "overko",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Knockout state management",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type" : "git",
+    "url": "https://github.com/lrn2prgrm/overko"
+  },
   "scripts": {
-    "build": "rm -rf dist && tsc",
-    "test": "mocha -r ts-node/register test/**/*.ts"
+    "build": "rimraf dist && tsc",
+    "test": "jest"
   },
   "keywords": [
     "knockout",
@@ -18,14 +22,13 @@
   "author": "lrn2prgrm",
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/mocha": "^5.2.6",
-    "chai": "^4.2.0",
-    "mocha": "^6.0.2",
-    "ts-node": "^8.0.3",
+    "@types/jest": "^24.0.11",
+    "jest": "^24.5.0",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.0",
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "knockout": "^3.5.0"
+    "knockout": "^3.0.0"
   }
 }

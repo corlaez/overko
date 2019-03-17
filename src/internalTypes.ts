@@ -20,7 +20,7 @@ export type ResolveActions<
         : Actions[T] extends NestedActions
         ? ResolveActions<Actions[T]>
         : never
-    };
+    }
 
 export type NestedPartial<T> = T extends Function
   ? T

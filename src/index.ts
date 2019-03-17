@@ -18,7 +18,7 @@ export class Overko<ThisConfig extends IConfiguration>
   effects: ThisConfig["effects"] & {};
   actions: ResolveActions<ThisConfig["actions"]>;
   private actionReferences: Function[] = [];
-  onInitialize: () => void;
+  initialized: Promise<any>
 
   constructor(
     config: ThisConfig,
@@ -31,26 +31,28 @@ export class Overko<ThisConfig extends IConfiguration>
       ? config.effects
       : {};
     this.actions = this.getActions(config);
-    this.onInitialize = () => {
-      config.onInitialize(this.getSnapshot());
-    };
+
+    if (config.onInitialize && mockedEffects == null) {
+      const onInitialize = this.createAction(
+        'onInitialize',
+        config.onInitialize
+      ) as any
+
+      this.initialized = Promise.resolve(onInitialize(this))
+    } else {
+      this.initialized = Promise.resolve(null)
+    }
   }
 
-  getSnapshot = () => {
-    const state = this.store.getState();
-    const snapshot: Config = {
-      state,
-      effects: this.effects,
-      actions: this.actions
-    };
-    return snapshot;
-  };
+  get state() {
+    return this.store.getState();
+  }
 
   createAction(name: string, action: any) {
     this.actionReferences.push(action);
     const actionFunc = async (value?: any) => {
       return new Promise((resolve, reject) => {
-        resolve(action(this.getSnapshot(), value) || undefined);
+        resolve(action(this, value) || undefined);
       });
     };
 
@@ -96,13 +98,20 @@ export function createOverko<Config extends IConfiguration>(
   config: Config
 ): Overko<Config> {
   const overko = new Overko(config);
-  overko.onInitialize();
   return overko;
+}
+
+export interface OverkoMock<Config extends IConfiguration>
+  extends Overko<Config> {
+  onInitialize: () => Promise<any>
 }
 
 export function createOverkoMock<Config extends IConfiguration>(
   config: Config,
-  mockedEffects?: NestedPartial<Config["effects"]>
-): Overko<Config> {
-  return new Overko(config, mockedEffects);
+  mockedEffects: NestedPartial<Config["effects"]> = {} as NestedPartial<Config["effects"]>
+): OverkoMock<Config> {
+  const mock = new Overko(config, mockedEffects) as OverkoMock<Config>;
+  const action = mock.createAction('onInitialize', config.onInitialize);
+  mock.onInitialize = () => action(mock);
+  return mock;
 }

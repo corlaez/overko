@@ -1,5 +1,4 @@
 import { ResolveActions } from "./internalTypes";
-import { Overko } from ".";
 
 export type IConfiguration = {
   onInitialize?: any;
