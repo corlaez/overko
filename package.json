@@ -1,11 +1,11 @@
 {
   "name": "overko",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Knockout state management",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
-    "type" : "git",
+    "type": "git",
     "url": "https://github.com/lrn2prgrm/overko"
   },
   "scripts": {
