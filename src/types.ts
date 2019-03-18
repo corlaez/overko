@@ -1,4 +1,4 @@
-import { ResolveActions } from "./internalTypes";
+import { Overko } from ".";
 
 export type IConfiguration = {
   onInitialize?: any;
@@ -13,16 +13,10 @@ export interface IConfig<ThisConfig extends IConfiguration> {
   actions: ThisConfig["actions"] & {};
 }
 
-export type IContext<ThisConfig extends IConfiguration> = {
-  state: ThisConfig["state"];
-  actions: ResolveActions<ThisConfig["actions"]>;
-  effects: ThisConfig["effects"];
-};
-
 export interface IAction<ThisConfig extends IConfiguration, Value> {
-  (context: IContext<ThisConfig>, value: Value): any;
+  (overko: Overko<ThisConfig>, value: Value): any;
 }
 
 export interface IOnInitialize<ThisConfig extends IConfiguration> {
-  (context: IContext<ThisConfig>): void;
+  (overko: Overko<ThisConfig>): void;
 }

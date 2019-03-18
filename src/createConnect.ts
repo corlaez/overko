@@ -7,8 +7,8 @@ interface Constructable {
 
 type ConnectFunction = (ViewModel: Constructable) => Constructable;
 
-type CreateConnect = <Config extends IConfiguration>(
-  overkoInstance: Overko<Config>
+type CreateConnect = <ThisConfig extends IConfiguration>(
+  overkoInstance: Overko<ThisConfig>
 ) => ConnectFunction;
 
 export const createConnect: CreateConnect = overkoInstance => ViewModel => {
@@ -19,7 +19,7 @@ export const createConnect: CreateConnect = overkoInstance => ViewModel => {
 
   class Wrapper {
     constructor(ownParams: any) {
-      const state = overkoInstance.store.getState();
+      const state = overkoInstance.state;
       const overkoParam = { state, effects: overkoInstance.effects };
       const mergedParams = {
         overko: overkoParam,
@@ -32,10 +32,10 @@ export const createConnect: CreateConnect = overkoInstance => ViewModel => {
   return Wrapper;
 };
 
-export interface IConnect<Config extends IConfiguration> {
+export interface IConnect<ThisConfig extends IConfiguration> {
   overko: {
-    state: Config["state"];
-    effects: Config["effects"];
-    actions: Config["actions"];
+    state: Overko<ThisConfig>["state"];
+    effects: Overko<ThisConfig>["effects"];
+    actions: Overko<ThisConfig>["actions"];
   };
 }
