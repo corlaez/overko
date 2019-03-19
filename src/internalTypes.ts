@@ -1,4 +1,5 @@
-import { IAction } from "./types";
+import { IAction, IState } from "./types";
+import { ObservableArray, Observable } from "knockout";
 
 type TActionValue<T> = T extends (a1: any, a2: infer TValue) => any
   ? TValue
@@ -20,7 +21,21 @@ export type ResolveActions<
         : Actions[T] extends NestedActions
         ? ResolveActions<Actions[T]>
         : never
-    }
+    };
+
+export type ResolveState<State extends IState> = State extends undefined
+  ? {}
+  : {
+      [P in keyof State]: State[P] extends Observable<any>
+        ? State[P]
+        : State[P] extends ObservableArray<any>
+        ? State[P]
+        : State[P] extends Array<any>
+        ? ObservableArray<State[P]>
+        : State[P] extends IState
+        ? ResolveState<State[P]>
+        : Observable<State[P]>
+    };
 
 export type NestedPartial<T> = T extends Function
   ? T

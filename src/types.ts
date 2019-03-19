@@ -13,6 +13,19 @@ export interface IConfig<ThisConfig extends IConfiguration> {
   actions: ThisConfig["actions"] & {};
 }
 
+export type IState =
+  | {
+      [key: string]:
+        | IState
+        | string
+        | number
+        | boolean
+        | object
+        | null
+        | undefined;
+    }
+  | undefined;
+
 export interface IAction<ThisConfig extends IConfiguration, Value> {
   (overko: Overko<ThisConfig>, value: Value): any;
 }
