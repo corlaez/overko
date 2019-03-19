@@ -1,9 +1,10 @@
 import { Overko, createOverkoMock } from ".";
 import { IAction } from "./types";
-import { Observable, observable } from "knockout";
+import { Observable, observable, observableArray } from "knockout";
 
 function createDefaultOverko() {
   const state = {
+    array: observableArray([1, 2, 3, 4, 5]),
     foo: "bar",
     item: {
       isAwesome: true
@@ -205,6 +206,11 @@ describe("Overko", () => {
       })
     ).not.toThrow();
     expect(app.state.item.isAwesome()).toBe(false);
+  });
+  test("should preserve array type", () => {
+    expect.assertions(1);
+    const app = createDefaultOverko();
+    expect(() => app.state.array()[0].toLocaleString()).not.toThrow();
   });
 });
 
