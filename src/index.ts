@@ -1,6 +1,6 @@
 import createStore, { Store } from "./createStore";
 import { IAction, IOnInitialize, IConfiguration } from "./types";
-import { ResolveActions, NestedPartial } from "./internalTypes";
+import { ResolveActions, NestedPartial, ResolveState } from "./internalTypes";
 export { IConnect, createConnect } from "./createConnect";
 
 /** This type can be overwriten by app developers if they want to avoid
@@ -44,8 +44,8 @@ export class Overko<ThisConfig extends IConfiguration>
     }
   }
 
-  get state(): ThisConfig["state"] {
-    return this.store.getState();
+  get state(): ResolveState<ThisConfig["state"]> {
+    return this.store.state;
   }
 
   private createAction(name: string, action: any) {
