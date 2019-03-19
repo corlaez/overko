@@ -14,7 +14,7 @@ const createStore = <State extends IState>(state: State): Store<State> => {
   };
 };
 
-export const deepCloneState = (obj: any): any => {
+const deepCloneState = (obj: any): any => {
   if (isPlainObject(obj)) {
     return Object.keys(obj).reduce(
       (aggr, key) => {
