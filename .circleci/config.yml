@@ -22,11 +22,11 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
+      - run: npm install
+
       - persist_to_workspace:
           root: ~/repo
           paths: .
-
-      - run: npm install
   build:
     <<: *defaults
     steps:
