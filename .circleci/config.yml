@@ -1,6 +1,7 @@
 # Javascript Node CircleCI 2.0 configuration file
 #
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+# https://circleci.com/docs/2.0/language-javascript/
+# https://circleci.com/blog/publishing-npm-packages-using-circleci-2-0/
 #
 version: 2
 
@@ -10,7 +11,7 @@ defaults: &defaults
     - image: circleci/node:10.15.3
 
 jobs:
-  test:
+  install:
     <<: *defaults
     steps:
       - checkout
@@ -21,47 +22,73 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
       - run: npm install
-      - run:
-          name: Run tests
-          command: npm test
+  build:
+    <<: *defaults
+    steps:
+      - run: npm run build
+  test:
+    <<: *defaults
+    steps:
+      - run: npm test
+  cache:
+    <<: *defaults
+    steps:
+      - run: echo "Saving to node modules to cache"
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
-      - persist_to_workspace:
-          root: ~/repo
-          paths: .
   deploy:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
-      - run:
-          name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-      - run:
-          name: Publish package
-          command: npm publish
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+      - run: npm publish
 
 workflows:
   version: 2
-  test-deploy:
+  pr:
     jobs:
-      - test:
+      - install:
           filters:
-            branches:
-              ignore:
-                - /wip.*/
             tags:
-              only: /^v.*/
-      - deploy:
+              ignore: /.*/
+      - build:
           requires:
+            - install
+      - test:
+          requires:
+            - install
+      - cache:
+          requires:
+            - build
             - test
+  deploy:
+    jobs:
+      - install:
           filters:
-            tags:
-              only: /^v.*/
             branches:
               ignore: /.*/
+            tags:
+              only: /^v.*/
+      - build:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - cache:
+          requires:
+            - build
+            - test
+      - deploy:
+          requires:
+            - build
+            - test
