@@ -30,15 +30,22 @@ jobs:
   build:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: ~/repo
+
       - run: npm run build
   test:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: ~/repo
+
       - run: npm test
   cache:
     <<: *defaults
     steps:
-      - run: echo "Saving to node modules to cache"
+      - attach_workspace:
+          at: ~/repo
 
       - save_cache:
           paths:
