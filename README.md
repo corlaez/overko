@@ -1,5 +1,7 @@
 # **_Overko_**
 
+[![CircleCI](https://circleci.com/gh/lrn2prgrm/overko.svg?style=svg)](https://circleci.com/gh/lrn2prgrm/overko)
+
 State management for [Knockoutjs](https://knockoutjs.com/).
 
 ## Motivation
