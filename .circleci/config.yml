@@ -62,10 +62,8 @@ jobs:
 workflows:
   version: 2
   pr:
-    jobs:
       - install:
           filters:
-            branches:
               ignore: master
             tags:
               ignore: /.*/
@@ -97,7 +95,6 @@ workflows:
     jobs:
       - install:
           filters:
-            branches:
               ignore: /.*/
             tags:
               only: /^v.*/
