@@ -235,7 +235,7 @@ describe("Overko mock", () => {
     done();
   });
 
-  test("shouldn't call initialize", async done => {
+  test("shouldn't call initialize", async () => {
     expect.assertions(1);
     const state = {
       value: 0
@@ -247,10 +247,37 @@ describe("Overko mock", () => {
 
     const mock = createOverkoMock(config);
     await mock.initialized;
+    expect(mock.state.value()).toEqual(0);
+  });
 
-    setTimeout(() => {
-      expect(mock.state.value()).toEqual(0);
-      done();
-    }, 1000);
+  test("should override mocked effects", async () => {
+    expect.assertions(4);
+    const setFail: Action = ({ effects: e, state: s }) => s.failState(e.fail());
+    const config = {
+      state: {
+        failState: false
+      },
+      effects: {
+        fail: () => true
+      },
+      actions: {
+        setFail
+      }
+    };
+    type Config = typeof config;
+    interface Action<Value = void> extends IAction<Config, Value> {}
+
+    const mock = createOverkoMock(config);
+    expect(mock.effects.fail()).toBe(true);
+    mock.actions.setFail();
+    expect(mock.state.failState()).toBe(true);
+
+    const mockedEffects = {
+      fail: () => false
+    };
+    const mock2 = createOverkoMock(config, mockedEffects);
+    expect(mock2.effects.fail()).toBe(false);
+    mock.actions.setFail();
+    expect(mock2.state.failState()).toBe(false);
   });
 });
