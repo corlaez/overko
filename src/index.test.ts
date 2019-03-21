@@ -1,5 +1,4 @@
-import { Overko, createOverkoMock } from ".";
-import { IAction } from "./types";
+import { Overko, createOverkoMock, IAction } from ".";
 import { Observable, observable, observableArray } from "knockout";
 
 function createDefaultOverko() {

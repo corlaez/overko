@@ -2,6 +2,7 @@ import createStore, { Store } from "./createStore";
 import { IAction, IOnInitialize, IConfiguration } from "./types";
 import { ResolveActions, NestedPartial, ResolveState } from "./internalTypes";
 export { IConnect, createConnect } from "./createConnect";
+export { IConfig, IOnInitialize, IAction, IConfiguration } from "./types";
 
 /** This type can be overwriten by app developers if they want to avoid
  * typing and then they can import `Action`,  `OnInitialize` etc. directly from
