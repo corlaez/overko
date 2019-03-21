@@ -62,12 +62,11 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-  build-deploy:
+  deploy:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: npm run build
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run: npm publish
 
