@@ -234,4 +234,23 @@ describe("Overko mock", () => {
     expect(mock.state.valuePlusTwo).toEqual(17);
     done();
   });
+
+  test("shouldn't call initialize", async done => {
+    expect.assertions(1);
+    const state = {
+      value: 0
+    };
+    const onInitialize: Action = context => context.state.value(15);
+    const config = { state, onInitialize };
+    type Config = typeof config;
+    interface Action<Value = void> extends IAction<Config, Value> {}
+
+    const mock = createOverkoMock(config);
+    await mock.initialized;
+
+    setTimeout(() => {
+      expect(mock.state.value()).toEqual(0);
+      done();
+    }, 1000);
+  });
 });
