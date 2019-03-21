@@ -30,8 +30,8 @@ export type ResolveState<State extends IState> = State extends undefined
         ? State[P]
         : State[P] extends ObservableArray<any>
         ? State[P]
-        : State[P] extends Array<any>
-        ? ObservableArray<any>
+        : State[P] extends Array<infer T>
+        ? ObservableArray<T>
         : State[P] extends IState
         ? ResolveState<State[P]>
         : Observable<State[P]>
