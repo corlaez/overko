@@ -102,12 +102,21 @@ workflows:
             tags:
               only: /^v.*/
       - build:
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - install
       - test:
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - install
       - deploy:
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - build
             - test
