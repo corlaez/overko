@@ -21,15 +21,16 @@ export class Overko<ThisConfig extends IConfiguration>
   initialized: Promise<any>;
 
   constructor(
-    config: ThisConfig,
+    configParam: ThisConfig,
     mockedEffects?: NestedPartial<ThisConfig["effects"]>
   ) {
-    this.store = createStore(config.state);
-    this.effects = mockedEffects
-      ? mockedEffects
-      : config.effects
-      ? config.effects
-      : {};
+    const effects = { ...configParam.effects, ...mockedEffects };
+    this.effects = effects;
+    const config = {
+      ...configParam,
+      effects
+    };
+    this.store = createStore(configParam.state);
     this.actions = this.getActions(config);
 
     if (config.onInitialize && mockedEffects == null) {
