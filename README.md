@@ -1,6 +1,4 @@
-# **_Overko_**
-
-[![CircleCI](https://circleci.com/gh/lrn2prgrm/overko.svg?style=svg)](https://circleci.com/gh/lrn2prgrm/overko)
+# **_Overko_** &middot; [![CircleCI Status](https://circleci.com/gh/lrn2prgrm/overko.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/lrn2prgrm/overko)
 
 State management for [Knockoutjs](https://knockoutjs.com/).
 
