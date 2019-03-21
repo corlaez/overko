@@ -34,6 +34,17 @@ jobs:
           at: ~/repo
 
       - run: npm run build
+  build-save:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run: npm run build
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
   test:
     <<: *defaults
     steps:
@@ -51,11 +62,12 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-  deploy:
+  build-deploy:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
+      - run: npm run build
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run: npm publish
 
@@ -101,7 +113,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-      - build:
+      - build-save:
           filters:
             tags:
               only: /^v.*/
@@ -118,5 +130,5 @@ workflows:
             tags:
               only: /^v.*/
           requires:
-            - build
+            - build-save
             - test
