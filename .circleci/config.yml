@@ -65,6 +65,8 @@ workflows:
     jobs:
       - install:
           filters:
+            branches:
+              ignore: master
             tags:
               ignore: /.*/
       - build:
@@ -77,25 +79,22 @@ workflows:
           requires:
             - build
             - test
-  deploy:
+  master-deploy:
     jobs:
       - install:
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+              only: master
       - build:
           requires:
             - install
       - test:
           requires:
             - install
-      - cache:
-          requires:
-            - build
-            - test
       - deploy:
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - build
             - test
