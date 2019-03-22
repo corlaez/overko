@@ -13,13 +13,12 @@ declare interface Config {}
 export interface Action<Value = void> extends IAction<Config, Value> {}
 export interface OnInitialize extends IOnInitialize<Config> {}
 
-export class Overko<ThisConfig extends IConfiguration>
-  implements IConfiguration {
+export class Overko<ThisConfig extends IConfiguration> {
   private store: Store<ThisConfig["state"]>;
   private actionReferences: Function[] = [];
   effects: ThisConfig["effects"] & {};
   actions: ResolveActions<ThisConfig["actions"]>;
-  initialized: Promise<any>;
+  onInitialize: () => Promise<void>;
 
   constructor(
     configParam: ThisConfig,
@@ -34,15 +33,13 @@ export class Overko<ThisConfig extends IConfiguration>
     this.store = createStore(configParam.state);
     this.actions = this.getActions(config);
 
-    if (config.onInitialize && mockedEffects == null) {
-      const onInitialize = this.createAction(
-        "onInitialize",
-        config.onInitialize
-      ) as any;
-
-      this.initialized = Promise.resolve(onInitialize(this));
+    if (config.onInitialize) {
+      this.onInitialize = async () => {
+        await config.onInitialize(this);
+        return Promise.resolve();
+      };
     } else {
-      this.initialized = Promise.resolve(null);
+      this.onInitialize = () => Promise.resolve();
     }
   }
 
@@ -103,19 +100,11 @@ export function createOverko<Config extends IConfiguration>(
   return overko;
 }
 
-export interface OverkoMock<Config extends IConfiguration>
-  extends Overko<Config> {
-  onInitialize: () => Promise<any>;
-}
-
 export function createOverkoMock<Config extends IConfiguration>(
   config: Config,
   mockedEffects: NestedPartial<Config["effects"]> = {} as NestedPartial<
     Config["effects"]
   >
-): OverkoMock<Config> {
-  const mock = new Overko(config, mockedEffects) as any;
-  const action = mock.createAction("onInitialize", config.onInitialize);
-  mock.onInitialize = () => action(mock);
-  return mock;
+): Overko<Config> {
+  return new Overko(config, mockedEffects);
 }
