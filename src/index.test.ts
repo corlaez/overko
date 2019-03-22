@@ -81,12 +81,12 @@ describe("Overko", () => {
   });
 
   test("should instantiate app with onInitialize", async () => {
-    expect.assertions(2);
+    expect.assertions(3);
     let value: any;
     const app = new Overko({
-      onInitialize(context: any, val: any) {
-        expect(context.state.foo()).toBe("bar");
-        value = val;
+      onInitialize(overko: any) {
+        expect(overko.state.foo()).toBe("bar");
+        value = overko;
       },
       state: {
         foo: "bar"
@@ -95,7 +95,8 @@ describe("Overko", () => {
         doThis() {}
       }
     });
-    await app.initialized;
+    expect(value).toBe(undefined);
+    await app.onInitialize();
     expect(value).toBe(app);
   });
   test("should be able to type actions", () => {
@@ -184,7 +185,7 @@ describe("Overko", () => {
       })
     )
 
-    return app.initialized.then(() => {
+    return app.onInitialize().then(() => {
       expect(result).toEqual(['foo', 'bar'])
     })
   })*/
@@ -235,7 +236,7 @@ describe("Overko mock", () => {
   });
 
   test("shouldn't call initialize", async () => {
-    expect.assertions(1);
+    expect.assertions(2);
     const state = {
       value: 0
     };
@@ -245,8 +246,9 @@ describe("Overko mock", () => {
     interface Action<Value = void> extends IAction<Config, Value> {}
 
     const mock = createOverkoMock(config);
-    await mock.initialized;
     expect(mock.state.value()).toEqual(0);
+    await mock.onInitialize();
+    expect(mock.state.value()).toEqual(15);
   });
 
   test("should override mocked effects", async () => {

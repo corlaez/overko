@@ -5,12 +5,16 @@
     "rootDir": "src",
     "outDir": "dist",
     "module": "commonjs",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": false,
     "moduleResolution": "node",
     "strict": true,
     "declaration": true,
     "skipLibCheck": true,
+    "pretty": true,
     "sourceMap": true,
-    "types": ["jest"]
+    "inlineSources": true,
+    "types": ["jest", "node"]
   },
   "include": ["src/**/*"]
 }

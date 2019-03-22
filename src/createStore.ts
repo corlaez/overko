@@ -1,13 +1,16 @@
 import { observable, observableArray } from "knockout";
-import * as isPlainObject from "is-plain-object";
 import { ResolveState } from "./internalTypes";
 import { IState } from "./types";
+
+const isPlainObject = require("is-plain-object");
 
 export type Store<State extends IState> = {
   state: ResolveState<State>;
 };
 
-const createStore = <State extends IState>(state: State): Store<State> => {
+export const createStore = <State extends IState>(
+  state: State
+): Store<State> => {
   const stateObservable = deepCloneState(state);
   return {
     state: stateObservable
@@ -48,5 +51,3 @@ const deepCloneState = (obj: any): any => {
   // every non plain object or array is handled here
   return observable(value);
 };
-
-export default createStore;
