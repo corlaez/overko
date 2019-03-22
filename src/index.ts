@@ -1,4 +1,4 @@
-import createStore, { Store } from "./createStore";
+import { createStore, Store } from "./createStore";
 import { IAction, IOnInitialize, IConfiguration } from "./types";
 import { ResolveActions, NestedPartial, ResolveState } from "./internalTypes";
 export { IConnect, createConnect } from "./createConnect";
