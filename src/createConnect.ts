@@ -19,10 +19,8 @@ export const createConnect: CreateConnect = overkoInstance => ViewModel => {
 
   class Wrapper {
     constructor(ownParams: any) {
-      const state = overkoInstance.state;
-      const overkoParam = { state, effects: overkoInstance.effects };
       const mergedParams = {
-        overko: overkoParam,
+        overko: overkoInstance,
         ...ownParams
       };
       return new ViewModel(mergedParams);
