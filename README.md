@@ -1,4 +1,4 @@
-# **_Overko_** &middot; [![CircleCI Status](https://circleci.com/gh/lrn2prgrm/overko.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/lrn2prgrm/overko)
+# **_Overko_** &middot; [![CircleCI Status](https://circleci.com/gh/lrn2prgrm/overko.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/lrn2prgrm/overko) [![Greenkeeper badge](https://badges.greenkeeper.io/corlaez/overko.svg)](https://greenkeeper.io/)
 
 State management for [Knockoutjs](https://knockoutjs.com/).
 
